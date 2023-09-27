@@ -186,7 +186,132 @@ curl ifconfig.me
 ````
 http://ip-address:8069/web/database/manager
 ````
-##### 6. Conclusion
+##### 6. nginx proxy manager
+---
+***I setup for nginx proxy manager a minimun setup on extra server but serve only for the proxy, the server is a virtual machine with 1vCPU and 1GB RAM and 8GB Disk.***
+---
+
+![proxy manager](/images/img_1.png "setup nginx proxy manager")
+
+***Forward hostname / ip:*** ip-address of the internal server
+***Forward port:*** 8069
+***Websockets Support:*** true
+
+![proxy manager](/images/img_2.png "setup nginx proxy manager")
+##Odoo 16.0
+***Custom locations:   "/"***
+*setup:*
+```
+proxy_read_timeout 720s;
+proxy_connect_timeout 720s;
+proxy_send_timeout 720s;
+# Add Headers for odoo proxy mode
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_redirect off;
+````
+***Custom locations:   "/websocket"***
+```
+proxy_read_timeout 720s;
+proxy_connect_timeout 720s;
+proxy_send_timeout 720s;
+# Add Headers for odoo proxy mode
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Real-IP $remote_addr;
+```
+
+![proxy manager](/images/img_3.png "setup nginx proxy manager")
+***Advanced:   "Custom nginx configuration"***
+```
+# common gzip
+gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript;
+gzip on;
+client_body_in_file_only clean;
+client_body_buffer_size 32K;
+client_max_body_size 500M;
+sendfile on;
+send_timeout 600s;
+keepalive_timeout 300;
+```
+
+## Odoo 15.0
+***Custom locations:   "/"***
+```
+#configurazione per odoo:
+# Add Headers for odoo proxy mode
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Real-IP $remote_addr;
+add_header X-Frame-Options "SAMEORIGIN";
+add_header X-XSS-Protection "1; mode=block";
+proxy_set_header X-Client-IP $remote_addr;
+proxy_set_header HTTP_X_FORWARDED_HOST $remote_addr;
+
+# increase proxy buffer size
+proxy_buffers 16 64k;
+proxy_buffer_size 128k;
+
+proxy_read_timeout 900s;
+proxy_connect_timeout 900s;
+proxy_send_timeout 900s;
+
+# force timeouts if the backend dies
+proxy_next_upstream error timeout invalid_header http_500 http_502
+http_503;
+
+types {
+text/less less;
+text/scss scss;
+}
+# enable data compression
+gzip on;
+gzip_min_length 1100;
+gzip_buffers 4 32k;
+gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript application/pdf image/jpeg image/png;
+gzip_vary on;
+ 
+client_max_body_size 0;
+proxy_redirect off;
+```
+***Custom locations:   "/longpolling"***
+
+```
+# Add Headers for odoo proxy mode
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Real-IP $remote_addr;
+add_header X-Frame-Options "SAMEORIGIN";
+add_header X-XSS-Protection "1; mode=block";
+proxy_set_header X-Client-IP $remote_addr;
+proxy_set_header HTTP_X_FORWARDED_HOST $remote_addr;
+```
+***Advanced:   "Custom nginx configuration"***
+
+##### where 8069 is the port of odoo "NOT LONGPOLLING" and 10.0.30.20 is remote server ip address where is installed odoo
+```
+location ~* .(js|css|png|jpg|jpeg|gif|ico)$ {
+expires 2d;
+proxy_pass http://10.0.30.20:8069;
+add_header Cache-Control "public, no-transform";
+}
+# cache some static data in memory for 60mins.
+location ~ /[a-zA-Z0-9_-]*/static/ {
+proxy_cache_valid 200 302 60m;
+proxy_cache_valid 404 1m;
+proxy_buffering on;
+expires 864000;
+proxy_pass http://10.0.30.20:8069;
+}
+
+```
+
+##### 7. Conclusion
 
 You've successfully installed Odoo 15.0/16.0 with a Python virtual environment on Ubuntu 22.04. This setup allows you to run multiple instances on the same server and offers a ready-made configuration for quick deployment.
 
