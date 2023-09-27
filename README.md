@@ -92,7 +92,7 @@ get the install script and make it executable
 ```
 # root user is required
 
-wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/16.0/install_odoo_ent.sh
+wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/main/install_odoo_ent.sh
 chmod +x install_odoo_ent.sh
 ./install_odoo_ent.sh
 ```
