@@ -194,11 +194,17 @@ http://ip-address:8069/web/database/manager
 ![proxy manager](/images/img_1.png "setup nginx proxy manager")
 
 ***Forward hostname / ip:*** ip-address of the internal server
+
 ***Forward port:*** 8069
+
 ***Websockets Support:*** true
 
+
 ![proxy manager](/images/img_2.png "setup nginx proxy manager")
+
+
 ##Odoo 16.0
+
 ***Custom locations:   "/"***
 *setup:*
 ```
@@ -225,6 +231,8 @@ proxy_set_header X-Real-IP $remote_addr;
 ```
 
 ![proxy manager](/images/img_3.png "setup nginx proxy manager")
+
+
 ***Advanced:   "Custom nginx configuration"***
 ```
 # common gzip
@@ -239,7 +247,9 @@ keepalive_timeout 300;
 ```
 
 ## Odoo 15.0
+
 ***Custom locations:   "/"***
+
 ```
 #configurazione per odoo:
 # Add Headers for odoo proxy mode
@@ -311,16 +321,6 @@ proxy_pass http://10.0.30.20:8069;
 
 ```
 
-##### 7. Conclusion
-
-You've successfully installed Odoo 15.0/16.0 with a Python virtual environment on Ubuntu 22.04. This setup allows you to run multiple instances on the same server and offers a ready-made configuration for quick deployment.
-
-If you found this script helpful, consider giving it a "like" on its GitHub repository. For more content like this, subscribe and hit the "like" button on the CrottoCode YouTube channel.
-
-- **GitHub Repository**: [odoo_auto_install](https://github.com/crottolo/odoo_auto_install)
-- **YouTube Channel**: [CrottoCode](https://youtube.com/@CrottoCode?si=JQqVblSkvNBBdC5S)
-
-Your support helps in creating more such helpful content. Thank you!
 
 ##### Issue:
 - 09/28/2023
@@ -336,3 +336,14 @@ pip uninstall cryptography
 pip install cryptography==37.0.0
 deactivate
 ````
+
+##### 7. Conclusion
+
+You've successfully installed Odoo 15.0/16.0 with a Python virtual environment on Ubuntu 22.04. This setup allows you to run multiple instances on the same server and offers a ready-made configuration for quick deployment.
+
+If you found this script helpful, consider giving it a "like" on its GitHub repository. For more content like this, subscribe and hit the "like" button on the CrottoCode YouTube channel.
+
+- **GitHub Repository**: [odoo_auto_install](https://github.com/crottolo/odoo_auto_install)
+- **YouTube Channel**: [CrottoCode](https://youtube.com/@CrottoCode?si=JQqVblSkvNBBdC5S)
+
+Your support helps in creating more such helpful content. Thank you!
