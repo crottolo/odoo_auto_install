@@ -197,6 +197,17 @@ If you found this script helpful, consider giving it a "like" on its GitHub repo
 
 Your support helps in creating more such helpful content. Thank you!
 
-Issues:
+##### Issue:
+- 09/28/2023
+***after installation with enterprise flag, you can have a problem with openssl version, you can solve it with the following command:***
+````
+sudo su - odoo #or 
+su odoo
 
-after installation with enterprise flag, you can have a problem with 
+source /odoo/odoo-server/venv/bin/activate
+pip uninstall pyopenssl
+pip install pyopenssl==22.0.0
+pip uninstall cryptography
+pip install cryptography==37.0.0
+deactivate
+````
