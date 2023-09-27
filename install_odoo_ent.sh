@@ -14,7 +14,7 @@
 # ./odoo-install
 ################################################################################
 
-OE_USER="odoo16"
+OE_USER="odoo"
 OE_HOME="/$OE_USER"
 OE_HOME_EXT="/$OE_USER/${OE_USER}-server"
 # The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
@@ -26,7 +26,7 @@ OE_PORT="8069"
 # IMPORTANT! This script contains extra libraries that are specifically needed for Odoo 16.0
 OE_VERSION="16.0"
 # Set this to True if you want to install the Odoo enterprise version!
-IS_ENTERPRISE="True"
+IS_ENTERPRISE="False"
 # Installs postgreSQL V14 instead of defaults (e.g V12 for Ubuntu 20/22) - this improves performance
 INSTALL_POSTGRESQL="True"
 INSTALL_POSTGRESQL_FOURTEEN="True"
@@ -44,7 +44,7 @@ LONGPOLLING_PORT="8072"
 GIT_USERNAME="crottolo"
 GIT_PASSWORD="you-password-of-github"
 
-
+################################################################################
 ##
 ###  WKHTMLTOPDF download links
 ## === Ubuntu Trusty x64 & x32 === (for other distributions please replace these two links,
@@ -193,9 +193,10 @@ if [ $IS_ENTERPRISE = "True" ]; then
     echo -e "\n---- Added Enterprise code under $OE_HOME/enterprise/addons ----"
     echo -e "\n---- Installing Enterprise specific libraries ----"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install num2words ofxparse dbfread ebaysdk firebase_admin pyOpenSSL"
-    sudo -u $OE_USER /bin/bash -c "pip3  uninstall --yes pyopenssl && pip3 install pyopenssl==22.0.0"
-    sudo -u $OE_USER /bin/bash -c "pip3  uninstall --yes cryptography && pip3 install cryptography==37.0.0"
-    # sudo -H pip3 install num2words ofxparse dbfread ebaysdk firebase_admin pyOpenSSL
+    sudo -u $OE_USER /bin/bash -c "pip3  uninstall --yes pyopenssl"
+    sudo -u $OE_USER /bin/bash -c "pip3 install pyopenssl==22.0.0"
+    sudo -u $OE_USER /bin/bash -c "pip3  uninstall --yes cryptography"
+    sudo -u $OE_USER /bin/bash -c "pip3 install cryptography==37.0.0"
     deactivate
     sudo npm install -g less
     sudo npm install -g less-plugin-clean-css
