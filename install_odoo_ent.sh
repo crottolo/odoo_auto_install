@@ -76,7 +76,7 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 sudo add-apt-repository "deb http://mirrors.kernel.org/ubuntu/ xenial main" -y
 sudo apt-get update
 sudo apt-get upgrade -y
-sudo apt-get install libpq-dev git -y
+sudo apt-get install libpq-dev git curl -y
 
 #--------------------------------------------------
 # Install PostgreSQL Server
