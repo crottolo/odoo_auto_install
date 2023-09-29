@@ -264,7 +264,7 @@ if [ $OE_VERSION > "11.0" ];then
     sudo su root -c "printf 'gevent_port = ${LONGPOLLING_PORT}\n' >> /etc/${OE_CONFIG}.conf"
     sudo su root -c "printf 'xmlrpcs_interfaces = 0.0.0.0\n' >> /etc/${OE_CONFIG}.conf"
     sudo su root -c "printf 'workers = 2\n' >> /etc/${OE_CONFIG}.conf"
-    sudo su root -c "printf 'max_cron_threads = 4\n' >> /etc/${OE_CONFIG}.conf"
+    sudo su root -c "printf 'max_cron_threads = 1\n' >> /etc/${OE_CONFIG}.conf"
     sudo su root -c "printf 'proxy_mode = True\n' >> /etc/${OE_CONFIG}.conf"
 
 else
