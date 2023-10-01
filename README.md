@@ -336,6 +336,24 @@ pip uninstall cryptography
 pip install cryptography==37.0.0
 deactivate
 ````
+###### wkhtmltopdf
+````
+apt-get remove wkhtmltopdf 
+apt autoremove 
+wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
+dpkg -i wkhtmltox_0.12.6.1-2.jammy_amd64.deb
+apt --fix-broken install
+
+add report.url in sytem parameters
+http://127.0.0.1:8069
+
+````
+##### Install fonts 
+````
+apt install ttf-mscorefonts-installer
+wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf94b27637a56/raw/96926e732a38d3da860624114990121d71c08ea1/tahoma.sh | bash
+wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
+
 
 ##### 7. Conclusion
 
