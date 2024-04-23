@@ -194,9 +194,9 @@ if [ $IS_ENTERPRISE = "True" ]; then
     echo -e "\n---- Installing Enterprise specific libraries ----"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install num2words ofxparse dbfread ebaysdk firebase_admin pyOpenSSL"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install paramiko"
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3  uninstall --yes pyopenssl"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3  uninstall -y pyopenssl"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install pyopenssl==22.0.0"
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3  uninstall --yes cryptography"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3  uninstall -y cryptography"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install cryptography==37.0.0"
     deactivate
     sudo npm install -g less
@@ -267,6 +267,7 @@ if [ $OE_VERSION > "11.0" ];then
     sudo su root -c "printf 'workers = 2\n' >> /etc/${OE_CONFIG}.conf"
     sudo su root -c "printf 'max_cron_threads = 1\n' >> /etc/${OE_CONFIG}.conf"
     sudo su root -c "printf 'proxy_mode = True\n' >> /etc/${OE_CONFIG}.conf"
+    sudo su root -c "printf 'logrotate = True\n' >> /etc/${OE_CONFIG}.conf"
 
 else
     sudo su root -c "printf 'xmlrpc_port = ${OE_PORT}\n' >> /etc/${OE_CONFIG}.conf"
