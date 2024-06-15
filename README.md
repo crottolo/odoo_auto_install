@@ -1,7 +1,8 @@
 # odoo_auto_install
+
 Installation of odoo 15.0 16.0 with virtual env on Ubuntu 22.04
 
-### Features and Benefits
+## Features and Benefits
 
 1. Python virtual environment
 2. Odoo 15.0 16.0
@@ -12,7 +13,8 @@ Installation of odoo 15.0 16.0 with virtual env on Ubuntu 22.04
 Simple configuration file to install odoo 15.0 16.0 with virtual env on Ubuntu 22.04
 
 Setting:
-```
+
+```sh
 ################################################################################
 
 OE_USER="odoo"
@@ -46,8 +48,10 @@ GIT_USERNAME="crottolo"
 GIT_PASSWORD="you-password-of-github"
 ################################################################################
 ```
+
+```sh
 #### Setting repository
-````
+
 ## Setting Up Multiple GitHub Repositories
 
 ### Public and Private Repository
@@ -56,13 +60,12 @@ GIT_PASSWORD="you-password-of-github"
 ##### GIT_USERNAME is your username of GitHub for private repository
 ##### GIT_PASSWORD is your password of GitHub for private repository
 
-```
+
 ...
 sudo git clone --depth 1 --branch 16.0 https://GIT_USERNAME:GIT_PASSWORD@github.com/crottolo/od_custom_app 
 
-```
+
 # variabile addons_paths
-```
 sub_dirs=(
   "${OE_HOME}/custom/addons"
   "${OE_HOME_EXT}/addons"
@@ -75,12 +78,13 @@ sub_dirs=(
   "${OE_HOME}/custom/partner-contact"
 )
 ```
+
 ---
-````
 
 ### Installation
 
-##### 1. Requirements
+#### 1. Requirements
+
 - Ubuntu 22.04
 - 2vCPU and 1GB RAM
 - 8GB Disk
@@ -89,7 +93,8 @@ This script will work on Ubuntu 22.04, it uses PostgreSQL as database, so it is 
 ##### 2. Get the script and make it executable
 
 get the install script and make it executable
-```
+
+```sh
 # root user is required
 
 wget https://raw.githubusercontent.com/crottolo/odoo_auto_install/main/install_odoo_ent.sh
@@ -98,8 +103,8 @@ chmod +x install_odoo_ent.sh
 ```
 
 attempt the end of the installation you will see the following message:
-```
 
+```sh
 
 -----------------------------------------------------------
 Done! The Odoo server is up and running. Specifications:
@@ -123,7 +128,7 @@ in the process you create a user with sudo privileges, for example odoo, and the
 
 For view the list o packages installed in the virtual environment:
 
-````
+```sh
 sudo su - odoo
 source /odoo/odoo-server/venv/bin/activate
 pip list
@@ -131,9 +136,11 @@ pip list
 pip install "package-name-you-want-to-install"
 
 deactivate
-````
-###### Example:
-````
+```
+
+##### Example
+
+```sh
 root@odoo_server:~# sudo su odoo
 odoo@odoo_server:/root$ cd
 odoo@odoo_server:~$ ls
@@ -162,33 +169,40 @@ Installing collected packages: tzdata, python-dateutil, numpy, pandas
 Successfully installed numpy-1.26.0 pandas-2.1.1 python-dateutil-2.8.2 tzdata-2023.3
 (odoo-venv) odoo@odoo_server:~$ deactivate 
 odoo@odoo_server:~$ 
-````
+```
 
 the important thing is to activate the virtual environment before installing the packages and then deactivate it.
-you see the confirm activation of the virtual environment in the prompt 
+you see the confirm activation of the virtual environment in the prompt
 ***(odoo-venv) odoo@odoo_server:*** pip install pandas
-and the deactivation in the prompt 
+and the deactivation in the prompt
 ***(odoo@odoo_server:~$)***
 
 after the installation of the package you can deactivate the virtual environment.
-````
+
+```sh
+
 (odoo-venv) odoo@odoo_server:~$ deactivate
 odoo@odoo_server:~$ 
-````
+```
 
 ##### 4. check ip address of the server
 
-````
+```sh
 curl ifconfig.me
-````
+```
+
 ##### 5. create a database on ip address of the server
 
-````
+```sh
 http://ip-address:8069/web/database/manager
-````
+```
+
 ##### 6. nginx proxy manager
+
 ---
+
 ***I setup for nginx proxy manager a minimun setup on extra server but serve only for the proxy, the server is a virtual machine with 1vCPU and 1GB RAM and 8GB Disk.***
+
 ---
 
 ![proxy manager](/images/img_1.png "setup nginx proxy manager")
@@ -199,15 +213,14 @@ http://ip-address:8069/web/database/manager
 
 ***Websockets Support:*** true
 
-
 ![proxy manager](/images/img_2.png "setup nginx proxy manager")
 
-
-##Odoo 16.0
+## Odoo 16.0
 
 ***Custom locations:   "/"***
 *setup:*
-```
+
+```sh
 proxy_read_timeout 720s;
 proxy_connect_timeout 720s;
 proxy_send_timeout 720s;
@@ -217,9 +230,11 @@ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 proxy_set_header X-Forwarded-Proto $scheme;
 proxy_set_header X-Real-IP $remote_addr;
 proxy_redirect off;
-````
-***Custom locations:   "/websocket"***
 ```
+
+***Custom locations:   "/websocket"***
+
+```sh
 proxy_read_timeout 720s;
 proxy_connect_timeout 720s;
 proxy_send_timeout 720s;
@@ -232,9 +247,9 @@ proxy_set_header X-Real-IP $remote_addr;
 
 ![proxy manager](/images/img_3.png "setup nginx proxy manager")
 
-
 ***Advanced:   "Custom nginx configuration"***
-```
+
+```sh
 # common gzip
 gzip_types text/css text/less text/plain text/xml application/xml application/json application/javascript;
 gzip on;
@@ -250,7 +265,7 @@ keepalive_timeout 300;
 
 ***Custom locations:   "/"***
 
-```
+```sh
 #configurazione per odoo:
 # Add Headers for odoo proxy mode
 proxy_set_header X-Forwarded-Host $host;
@@ -288,9 +303,10 @@ gzip_vary on;
 client_max_body_size 0;
 proxy_redirect off;
 ```
+
 ***Custom locations:   "/longpolling"***
 
-```
+```sh
 # Add Headers for odoo proxy mode
 proxy_set_header X-Forwarded-Host $host;
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -301,10 +317,12 @@ add_header X-XSS-Protection "1; mode=block";
 proxy_set_header X-Client-IP $remote_addr;
 proxy_set_header HTTP_X_FORWARDED_HOST $remote_addr;
 ```
+
 ***Advanced:   "Custom nginx configuration"***
 
-##### where 8069 is the port of odoo "NOT LONGPOLLING" and 10.0.30.20 is remote server ip address where is installed odoo
-```
+### where 8069 is the port of odoo "NOT LONGPOLLING" and 10.0.30.20 is remote server ip address where is installed odoo
+
+```sh
 location ~* .(js|css|png|jpg|jpeg|gif|ico)$ {
 expires 2d;
 proxy_pass http://10.0.30.20:8069;
@@ -319,11 +337,11 @@ expires 864000;
 proxy_pass http://10.0.30.20:8069;
 }
 
-```
+```sh
 ##### Issue:
 - 09/28/2023
 ***after installation with enterprise flag, you can have a problem with openssl version, you can solve it with the following command:***
-```
+```sh
 sudo su - odoo #or 
 su odoo
 
@@ -334,8 +352,10 @@ pip uninstall cryptography
 pip install cryptography==37.0.0
 deactivate
 ```
-###### wkhtmltopdf
-```
+
+#### wkhtmltopdf
+
+```sh
 apt-get remove wkhtmltopdf 
 apt autoremove 
 wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
@@ -348,9 +368,11 @@ add report.url in sytem parameters
 http://127.0.0.1:8069
 
 ```
-##### Install fonts 
 
-```
+##### Install fonts
+
+```sh
+
 apt install ttf-mscorefonts-installer
 wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf94b27637a56/raw/96926e732a38d3da860624114990121d71c08ea1/tahoma.sh | bash
 wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
