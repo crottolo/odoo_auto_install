@@ -320,12 +320,10 @@ proxy_pass http://10.0.30.20:8069;
 }
 
 ```
-
-
 ##### Issue:
 - 09/28/2023
 ***after installation with enterprise flag, you can have a problem with openssl version, you can solve it with the following command:***
-````
+```
 sudo su - odoo #or 
 su odoo
 
@@ -335,9 +333,9 @@ pip install pyopenssl==22.0.0
 pip uninstall cryptography
 pip install cryptography==37.0.0
 deactivate
-````
+```
 ###### wkhtmltopdf
-````
+```
 apt-get remove wkhtmltopdf 
 apt autoremove 
 wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
@@ -349,7 +347,7 @@ apt --fix-broken install
 add report.url in sytem parameters
 http://127.0.0.1:8069
 
-````
+```
 ##### Install fonts 
 
 ```
