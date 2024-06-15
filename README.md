@@ -355,7 +355,7 @@ http://127.0.0.1:8069
 apt install ttf-mscorefonts-installer
 wget -q -O - https://gist.githubusercontent.com/Blastoise/b74e06f739610c4a867cf94b27637a56/raw/96926e732a38d3da860624114990121d71c08ea1/tahoma.sh | bash
 wget https://gist.githubusercontent.com/maxwelleite/913b6775e4e408daa904566eb375b090/raw/ttf-ms-tahoma-installer.sh -q -O - | sudo bash
-
+```
 
 ##### 7. Conclusion
 
