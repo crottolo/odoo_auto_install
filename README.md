@@ -345,11 +345,11 @@ proxy_pass http://10.0.30.20:8069;
 sudo su - odoo #or 
 su odoo
 
-source /odoo/odoo-server/venv/bin/activate
-pip uninstall pyopenssl
-pip install pyopenssl==22.0.0
-pip uninstall cryptography
-pip install cryptography==37.0.0
+source /odoo/odoo-venv/bin/activate
+pip uninstall pyopenssl -y;
+pip install pyopenssl==22.0.0;
+pip uninstall cryptography -y;
+pip install cryptography==37.0.0;
 deactivate
 ```
 
