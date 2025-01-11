@@ -182,7 +182,15 @@ source $OE_HOME/odoo-venv/bin/activate
 echo -e "\n---- Install python packages/requirements ----"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install wheel setuptools"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install -r $OE_HOME_EXT/requirements.txt"
-sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers pdfminer.six"
+
+# Fix SSL certificate issues and compatibility problems
+echo -e "\n---- Fix SSL certificates and compatibility issues ----"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 uninstall pyopenssl -y"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install pyopenssl==22.0.0"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 uninstall cryptography -y"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install cryptography==37.0.0"
+
 echo -e "\n---- Deactivate venv ----"
 deactivate
 
@@ -191,7 +199,7 @@ deactivate
 
 if [ $IS_ENTERPRISE = "True" ]; then
     # Odoo Enterprise install!
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install psycopg2-binary pdfminer.six"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install psycopg2-binary"
     echo -e "\n--- Create symlink for node"
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     sudo su $OE_USER -c "mkdir $OE_HOME/enterprise"
