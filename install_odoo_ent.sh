@@ -78,6 +78,23 @@ sudo apt-get update
 sudo apt-get upgrade -y
 sudo apt-get install libpq-dev git curl -y
 
+# Install Python 3.9 and required dependencies
+echo -e "\n---- Install Python 3.9 and dependencies ----"
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt-get update
+sudo apt-get install python3.9 python3.9-dev python3.9-venv python3.9-distutils python3.9-lib2to3 python3.9-gdbm python3.9-tk -y
+
+# Install pip for Python 3.9
+echo -e "\n---- Install pip for Python 3.9 ----"
+curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3.9
+
+# Install build dependencies for Python packages
+echo -e "\n---- Install build dependencies ----"
+sudo apt-get install build-essential libssl-dev libffi-dev python3.9-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev libldap2-dev libsasl2-dev -y
+
+# Create symbolic link to make python3.9 the default python3
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1
+
 #--------------------------------------------------
 # Install PostgreSQL Server
 #--------------------------------------------------
@@ -159,10 +176,11 @@ echo -e "\n==== Installing ODOO Server ===="
 sudo git clone --depth 1 --branch $OE_VERSION https://www.github.com/odoo/odoo $OE_HOME_EXT/
 
 echo -e "\n---- Create venv  ----"
-sudo -u $OE_USER /bin/bash -c "python3 -m venv $OE_HOME/odoo-venv"
+sudo -u $OE_USER /bin/bash -c "python3.9 -m venv $OE_HOME/odoo-venv"
 echo -e "\n---- Activate venv ----"
 source $OE_HOME/odoo-venv/bin/activate
 echo -e "\n---- Install python packages/requirements ----"
+sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install wheel setuptools"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install -r $OE_HOME_EXT/requirements.txt"
 sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install python-codicefiscale phonenumbers"
 echo -e "\n---- Deactivate venv ----"
@@ -194,9 +212,9 @@ if [ $IS_ENTERPRISE = "True" ]; then
     echo -e "\n---- Installing Enterprise specific libraries ----"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install num2words ofxparse dbfread ebaysdk firebase_admin pyOpenSSL"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install paramiko"
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3  uninstall -y pyopenssl"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 uninstall -y pyopenssl"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install pyopenssl==22.0.0"
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3  uninstall -y cryptography"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 uninstall -y cryptography"
     sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install cryptography==37.0.0"
     deactivate
     sudo npm install -g less
