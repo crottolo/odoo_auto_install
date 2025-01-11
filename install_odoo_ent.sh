@@ -136,26 +136,28 @@ sudo npm install -g rtlcss
 # Install Wkhtmltopdf if needed
 #--------------------------------------------------
 if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
-  echo -e "\n---- Install wkhtml and place shortcuts on correct place for ODOO 13 ----"
-  #pick up correct one from x64 & x32 versions:
-  if [ "`getconf LONG_BIT`" == "64" ];then
-      _url=$WKHTMLTOX_X64
-  else
-      _url=$WKHTMLTOX_X32
-  fi
-  sudo wget $_url
-  
+  echo -e "\n---- Remove existing wkhtmltopdf ----"
+  sudo apt-get remove wkhtmltopdf -y
+  sudo apt autoremove -y
 
-  if [[ $(lsb_release -r -s) == "22.04" ]]; then
-    # Ubuntu 22.04 LTS
-    sudo apt install wkhtmltopdf -y
+  echo -e "\n---- Install wkhtmltopdf 0.12.6.1-3 ----"
+  if [ "`getconf LONG_BIT`" == "64" ]; then
+    sudo wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb
+    sudo dpkg -i wkhtmltox_0.12.6.1-3.jammy_amd64.deb
+    sudo apt --fix-broken install -y
+    sudo rm wkhtmltox_0.12.6.1-3.jammy_amd64.deb
   else
-      # For older versions of Ubuntu
-    sudo gdebi --n `basename $_url`
+    echo "Error: 32-bit systems are not supported for this wkhtmltopdf version"
+    exit 1
   fi
-  
-  sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin
-  sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin
+
+  echo -e "\n---- Create symlinks for wkhtmltopdf ----"
+  sudo ln -s /usr/local/bin/wkhtmltopdf /usr/bin/wkhtmltopdf
+  sudo ln -s /usr/local/bin/wkhtmltoimage /usr/bin/wkhtmltoimage
+
+  echo -e "\n---- Setting up report.url in Odoo system parameters ----"
+  # This will be set up when Odoo is running through database management
+  echo "Note: Don't forget to set up report.url=http://127.0.0.1:8069 in Odoo system parameters"
 else
   echo "Wkhtmltopdf isn't installed due to the choice of the user!"
 fi
