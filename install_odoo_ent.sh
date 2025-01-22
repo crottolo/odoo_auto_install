@@ -104,9 +104,20 @@ sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
 #--------------------------------------------------
 # Install Dependencies
 #--------------------------------------------------
-echo -e "\n--- Installing Python 3 + pip3 --"
-sudo apt-get install python3 python3-pip -y
-sudo apt-get install git python3-cffi build-essential wget python3-dev python3-venv python3-wheel libxslt-dev libzip-dev libldap2-dev libsasl2-dev python3-setuptools node-less libpng-dev libjpeg-dev gdebi -y
+echo -e "\n--- Installing Python 3.11 + pip3 --"
+# Add deadsnakes PPA to get Python 3.11
+sudo add-apt-repository ppa:deadsnakes/ppa -y
+sudo apt-get update
+sudo apt-get install python3.11 python3.11-dev python3.11-venv -y
+
+# Create symbolic link to make python3.11 the default python3
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+
+# Install pip for Python 3.11
+curl -sS https://bootstrap.pypa.io/get-pip.py | sudo python3.11
+
+# Install other dependencies
+sudo apt-get install git build-essential wget libxslt-dev libzip-dev libldap2-dev libsasl2-dev node-less libpng-dev libjpeg-dev gdebi -y
 
 # echo -e "\n---- Install python packages/requirements ----"
 # sudo -H pip3 install -r https://github.com/odoo/odoo/raw/${OE_VERSION}/requirements.txt
