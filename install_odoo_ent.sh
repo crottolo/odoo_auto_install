@@ -131,8 +131,8 @@ sudo npm install -g rtlcss
 #--------------------------------------------------
 if [ $INSTALL_WKHTMLTOPDF = "True" ]; then
   echo -e "\n---- Install wkhtml and place shortcuts on correct place for ODOO 13 ----"
-  wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
-  dpkg -i wkhtmltox_0.12.6.1-2.jammy_amd64.deb
+  wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.jammy_amd64.deb
+  dpkg -i wkhtmltox_0.12.6.1-3.jammy_amd64.deb
   apt-get install -f -y
   ln -s /usr/local/bin/wkhtmltopdf /usr/bin
   ln -s /usr/local/bin/wkhtmltoimage /usr/bin
@@ -170,7 +170,7 @@ deactivate
 
 if [ $IS_ENTERPRISE = "True" ]; then
     # Odoo Enterprise install!
-    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install psycopg2-binary pdfminer.six"
+    sudo -u $OE_USER /bin/bash -c "source $OE_HOME/odoo-venv/bin/activate && pip3 install psycopg2-binary pdfminer.six fillpdf"
     echo -e "\n--- Create symlink for node"
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     sudo su $OE_USER -c "mkdir $OE_HOME/enterprise"
