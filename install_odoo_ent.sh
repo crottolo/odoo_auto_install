@@ -39,6 +39,12 @@ WEBSITE_NAME="example.com"
 GIT_USERNAME="crottolo"
 GIT_PASSWORD="you-password-of-github"
 
+# SMTP via Resend: i parametri di connessione sono costanti, basta la API key.
+# SET_SMTP_RESEND="yes" aggiunge il blocco SMTP al conf; la chiave va inserita QUI
+# a deploy (placeholder nel repo pubblico: NON committare chiavi reali).
+SET_SMTP_RESEND="no"
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxxxx"
+
 ################################################################################
 ##
 ###  WKHTMLTOPDF download links
@@ -277,6 +283,23 @@ EOF
 # Ora scrivi addons_path nel file di configurazione
 sudo su root -c "echo -e '$addons_path' >> /etc/${OE_CONFIG}.conf"
 
+#--------------------------------------------------
+# SMTP Resend (se abilitato in testa allo script)
+# Porta 587 + smtp_ssl=True => STARTTLS (la 465/SSL implicito non è gestibile via conf)
+#--------------------------------------------------
+if [ "$SET_SMTP_RESEND" = "yes" ] && [ -n "$RESEND_API_KEY" ] && [ "$RESEND_API_KEY" != "re_xxxxxxxxxxxxxxxxxxxx" ]; then
+    echo -e "* Adding Resend SMTP configuration to server config file"
+    sudo tee -a /etc/${OE_CONFIG}.conf > /dev/null <<EOF
+smtp_server = smtp.resend.com
+smtp_port = 587
+smtp_ssl = True
+smtp_user = resend
+smtp_password = ${RESEND_API_KEY}
+email_from = no-reply@fl1.it
+from_filter = fl1.it
+EOF
+fi
+
 sudo chown $OE_USER:$OE_USER /etc/${OE_CONFIG}.conf
 sudo chmod 640 /etc/${OE_CONFIG}.conf
 
@@ -446,6 +469,9 @@ echo "User PostgreSQL: $OE_USER"
 echo "Code location: $OE_USER"
 echo "Addons folder: $OE_USER/$OE_CONFIG/addons/"
 echo "Password superadmin (database): $OE_SUPERADMIN"
+if [ "$SET_SMTP_RESEND" = "yes" ] && [ -n "$RESEND_API_KEY" ]; then
+echo "SMTP: Resend configurato (mittente no-reply@fl1.it)"
+fi
 echo "Start Odoo service: sudo systemctl start $OE_USER.service"
 echo "Stop Odoo service: sudo systemctl stop $OE_USER.service"
 echo "Restart Odoo service: sudo systemctl restart $OE_USER.service"
